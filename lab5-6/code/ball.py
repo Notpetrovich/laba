@@ -3,38 +3,36 @@ import pygame
 import math
 import copy
 from pygame.draw import *
+inbikst = pygame.image.load('textures/inb.jpg')
 
-inbt = pygame.image.load('textures/inb.jpg')
-m = []
+x = randint(100, 1100)
+y = randint(100, 800)
+vx = randint(-10, 10)
+vy = randint(-10, 10)
+r = 20
+color = [randint(50, 255), randint(50, 255), randint(50, 255)]
+vc = [randint(1, 10), randint(1, 10), randint(1, 10)]
+vcm = math.sqrt(vc[0]**2 + vc[1]**2 + vc[2]**2)
+for j in range(3):
+    vc[j] /= vcm
+jewish = 1
+inbikstish = 0
+m = [[[x, y], [vx, vy], r, color, jewish, vc, inbikstish]]
+
 
 def getm():
     return m
-
-
-def new_ball():
-    x = randint(100, 1100)
-    y = randint(100, 800)
-    vx = randint(-10, 10)
-    vy = randint(-10, 10)
-    r = 20
-    color = [randint(50, 255), randint(50, 255), randint(50, 255)]
-    vc = [randint(1, 10), randint(1, 10), randint(1, 10)]
-    vcm = math.sqrt(vc[0]**2 + vc[1]**2 + vc[2]**2)
-    for j in range(3):
-        vc[j] /= vcm
-    jewish = 1
-    inbikst = 0
-    global m 
-    m = m + [[[x, y], [vx, vy], r, color, jewish, vc, inbikst]]
 
 
 def draw_balls(screen):
     for i in range(len(m)):
         if m[i][6] > 0:
             circle(screen, [255, 255, 255], (int(m[i][0][0]), int(m[i][0][1])) , m[i][2]*10)
-            screen.blit(inbt, (int(m[i][0][0]) - 32, int(m[i][0][1]) - 32))
+            screen.blit(inbikst, (int(m[i][0][0]) - 32, int(m[i][0][1]) - 32))
             continue
+
         circle(screen, m[i][3], (int(m[i][0][0]), int(m[i][0][1])) , m[i][2]*10)
+
         if m[i][4] == 1:
             m1 = (int(m[i][0][0]), int(m[i][0][1]) - m[i][2]*8)
             m2 = (int(m[i][0][0]) + m[i][2]*5, int(m[i][0][1]) + m[i][2]*4)
@@ -49,6 +47,7 @@ def draw_balls(screen):
             line(screen, c, m4, m5, 5)
             line(screen, c, m4, m6, 5)
             line(screen, c, m5, m6, 5)
+
 
 def move_balls(t):
     global m 
@@ -84,6 +83,7 @@ def move_balls(t):
                 m[i][3][j] = 255
                 m[i][5][j] *= -1
 
+
 def ball_hit(i, j, t):
     if i != j:
         l = math.sqrt((m[i][0][0]-m[j][0][0])**2 + (m[i][0][1]-m[j][0][1])**2)
@@ -99,6 +99,7 @@ def ball_hit(i, j, t):
         m[j][1][1] += x*b*m[i][2]
         m[j][0][0] += (l-10*M)*a
         m[j][0][1] += (l-10*M)*b
+
 
 def ball_exist(t):
     global m
@@ -122,6 +123,7 @@ def ball_exist(t):
     
     if randint(0, 800000) == 0:
         m += [[[randint(100, 1100), randint(100, 800)], [randint(-20, 10), randint(-10, 10)], 5, [0, 0, 0], 0, [0, 0, 0], 100]]
+
 
 def ball_spanking(n):
     global m

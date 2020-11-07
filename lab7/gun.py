@@ -59,8 +59,8 @@ class ball():
             self.x = 799 - self.r
             self.vx *= -1
 
-        if self.y + self.r >= 570:
-            self.y = 570 - self.r
+        if self.y + self.r >= 520:
+            self.y = 520 - self.r
             self.vy *= -0.5
             self.vx *= 0.5
 
@@ -190,6 +190,8 @@ def new_game(event=''):
         time.sleep(0.03)
         g1.targetting()
         g1.power_up()
+    g1.f2_power = 0
+    g1.f2_on = 0
     canv.itemconfig(screen1, text='')
     root.after(750, new_game)
 
