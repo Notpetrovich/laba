@@ -25,6 +25,9 @@ def getm():
 
 
 def draw_balls(screen):
+    '''
+    Drawing balls
+    '''
     for i in range(len(m)):
         if m[i][6] > 0:
             circle(screen, [255, 255, 255], (int(m[i][0][0]), int(m[i][0][1])) , m[i][2]*10)
@@ -50,6 +53,9 @@ def draw_balls(screen):
 
 
 def move_balls(t):
+    '''
+    Calculation of the movement of balls over time withous collisions
+    '''
     global m 
     for i in range(len(m)):
         m[i][0][0] += t*m[i][1][0]
@@ -85,6 +91,9 @@ def move_balls(t):
 
 
 def ball_hit(i, j, t):
+    '''
+    Ball collision handling
+    '''
     if i != j:
         l = math.sqrt((m[i][0][0]-m[j][0][0])**2 + (m[i][0][1]-m[j][0][1])**2)
         M = m[i][2]+m[j][2]
@@ -102,6 +111,9 @@ def ball_hit(i, j, t):
 
 
 def ball_exist(t):
+    '''
+    Calculation of the movement of balls over time
+    '''
     global m
     move_balls(t)
     for i in range(len(m)):
@@ -126,6 +138,9 @@ def ball_exist(t):
 
 
 def ball_spanking(n):
+    '''
+    Ball click handling
+    '''
     global m
     global score
     p = randint (0, 3)
@@ -173,6 +188,9 @@ def ball_spanking(n):
 
 
 def ball_attempt(pos):
+    '''
+    Checking if a click hit a ball
+    '''
     for i in range(len(m)):
         if math.sqrt((m[i][0][0] - pos[0])**2 + (m[i][0][1] - pos[1])**2) < m[i][2]*10:
             return ball_spanking(i)

@@ -15,7 +15,10 @@ jt = [0, [0, 0]]
 dr = 0
 
 
-def jokers_trap(x):
+def jokers_trap(p):
+    '''
+    Set a trap at point p=(x, y)
+    '''
     global score
     score -= 15
     jt[0] = 2000
@@ -23,6 +26,9 @@ def jokers_trap(x):
 
 
 def time_dilation():
+    '''
+    Use a time dilation bonus
+    '''
     global score
     score -= 10
     global dr
@@ -30,6 +36,9 @@ def time_dilation():
 
 
 def call():
+    '''
+    Use a call bonus
+    '''
     global score
     m = getm()
     score -= 17
@@ -37,10 +46,10 @@ def call():
     T = 0
 
     while T < 1000:
-        T += 2*c.tick()
+        T += 2 * c.tick()
         k = 1 + (T/1000)**4
-        b = pygame.transform.scale(bogdanoff, (int(600*k), int(480*k)))
-        screen.blit(b, (600 - int(300*k), 500 - int(240*k)))
+        b = pygame.transform.scale(bogdanoff, (int(600 * k), int(480 * k)))
+        screen.blit(b, (600 - int(300 * k), 500 - int(240 * k)))
         pygame.display.update()
 
     F = 1
@@ -53,6 +62,9 @@ def call():
                 break
 
 def draw():
+    '''
+    Drawing a new frame
+    '''
     screen.fill((0, 0, 0))
     rect(screen, (50, 20, 70), (0, 0, 1200, 100))
     font1 = pygame.font.SysFont(None, 54)
@@ -73,6 +85,9 @@ def draw():
 
 
 def exist(t):
+    '''
+    Changing the game world over time
+    '''
     jt[0] -= t
     if jt[0] < 0:
         jt[0] = 0
@@ -87,13 +102,16 @@ def exist(t):
     if dr < 0:
         dr = 0
     if dr == 0:
-        k=1
+        k = 1
     else:
-        k= 0.3
-    ball_exist(0.05*t*k)
+        k = 0.3
+    ball_exist(0.05 * t * k)
 
 
 def check_end():
+    '''
+    Сhecks if it's time to end the game
+    '''
     if score < 0:
         screen.fill((255, 0, 0))
         font2 = pygame.font.SysFont(None, 80)
