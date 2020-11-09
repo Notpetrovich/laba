@@ -2,82 +2,14 @@ from random import randrange as rnd, choice
 import tkinter as tk
 import math
 import time
+import gameobjects
 
-# print (dir(math))
 
 root = tk.Tk()
 fr = tk.Frame(root)
 root.geometry('800x600')
 canv = tk.Canvas(root, bg='white')
-canv.pack(fill=tk.BOTH, expand=1)
-
-
-class ball():
-    def __init__(self, x=40, y=450):
-        """ Конструктор класса ball
-
-        Args:
-        x - начальное положение мяча по горизонтали
-        y - начальное положение мяча по вертикали
-        """
-        self.x = x
-        self.y = y
-        self.r = 10
-        self.vx = 0
-        self.vy = 0
-        self.color = choice(['blue', 'green', 'red', 'brown'])
-        self.id = canv.create_oval(
-                self.x - self.r,
-                self.y - self.r,
-                self.x + self.r,
-                self.y + self.r,
-                fill=self.color
-        )
-        self.live = 100
-
-    def set_coords(self):
-        canv.coords(
-                self.id,
-                self.x - self.r,
-                self.y - self.r,
-                self.x + self.r,
-                self.y + self.r
-        )
-
-    def move(self):
-        """Переместить мяч по прошествии единицы времени.
-
-        Метод описывает перемещение мяча за один кадр перерисовки. То есть, обновляет значения
-        self.x и self.y с учетом скоростей self.vx и self.vy, силы гравитации, действующей на мяч,
-        и стен по краям окна (размер окна 800х600).
-        """
-        self.vy -= 1
-        self.x += self.vx
-        self.y -= self.vy 
-        
-        if self.x + self.r >= 800:
-            self.x = 799 - self.r
-            self.vx *= -1
-
-        if self.y + self.r >= 520:
-            self.y = 520 - self.r
-            self.vy *= -0.5
-            self.vx *= 0.5
-
-        self.set_coords()
-        self.live -= 1
-
-    def hittest(self, obj):
-        """Функция проверяет сталкивалкивается ли данный обьект с целью, описываемой в обьекте obj.
-
-        Args:
-            obj: Обьект, с которым проверяется столкновение.
-        Returns:
-            Возвращает True в случае столкновения мяча и цели. В противном случае возвращает False.
-        """
-        s = math.sqrt((self.x - obj.x)**2 + (self.y - obj.y)**2)
-        return s <= self.r + obj.r
-             
+canv.pack(fill=tk.BOTH, expand=1)      
 
 
 class gun():
@@ -91,19 +23,11 @@ class gun():
         self.f2_on = 1
 
     def fire2_end(self, event):
-        """Выстрел мячом.
-
-        Происходит при отпускании кнопки мыши.
-        Начальные значения компонент скорости мяча vx и vy зависят от положения мыши.
-        """
         global balls, bullet
         bullet += 1
-        new_ball = ball()
-        new_ball.r += 5
-        self.an = math.atan((event.y-new_ball.y) / (event.x-new_ball.x))
-        new_ball.vx = self.f2_power * math.cos(self.an)/2
-        new_ball.vy = - self.f2_power * math.sin(self.an)/2
-        new_ball.set_coords()
+        self.an = math.atan((event.y-450) / (event.x-40))
+        new_ball = gameobjects.Ball((40, 450), (self.f2_power * math.cos(self.an)/2, - self.f2_power * math.sin(self.an)/2), 15, canv)
+        new_ball.redraw()
         balls += [new_ball]
         self.f2_on = 0
         self.f2_power = 10
@@ -173,7 +97,7 @@ def new_game(event=''):
     t1.live = 1
     while t1.live or balls:
         for b in balls:
-            b.move()    
+            b.move(1)    
             if b.hittest(t1) and t1.live:
                 t1.live = 0
                 t1.hit()
